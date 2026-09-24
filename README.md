@@ -1,50 +1,45 @@
-# Toggle IPv6 脚本
+# IPv6 一键启用/禁用脚本
 
-一个简单的 Bash 脚本，用于在 Linux 系统中切换 IPv6 的启用或禁用状态。
+自动检测当前 IPv6 状态，并执行相反操作：如果当前 IPv6 已启用，则禁用它；如果当前已禁用，则启用它。
 
 ## 特性
 
-- **切换 IPv6**：通过一个命令在启用和禁用 IPv6 之间切换。
-- **简洁高效**：自动检查当前 IPv6 状态并根据需要切换。
+- 自动判断当前 IPv6 状态
+- 一键切换 IPv6 启用/禁用
+- 修改运行时内核参数
+- 写入 `/etc/sysctl.conf`，重启后仍然生效
+- 需要 root 权限运行
 
-## 安装
+## 一键运行
 
-```
-bash -c "$(curl -L https://raw.githubusercontent.com/SumMoonYou/toggle_ipv6/main/toggle_ipv6.sh?t=$(date +%s))" @ install
-```
+将下面的 `yourname/yourrepo` 替换为你的 GitHub 用户名和仓库名。
 
-脚本会检查当前 IPv6 状态。如果 IPv6 已启用，则禁用它；如果 IPv6 已禁用，则启用它。
+### 使用 curl
 
-### 示例：
-
-```
-$ ./toggle_ipv6.sh
-当前 IPv6 已启用，正在禁用 IPv6...
-禁用 IPv6...
-IPv6 已禁用.
+```bash
+curl -fsSL https://raw.githubusercontent.com/SunMoonWithYou/toggle_ipv6/main/install.sh | sudo bash
 ```
 
-如果 IPv6 已禁用，脚本会输出：
+### 使用 wget
 
-```
-$ ./toggle_ipv6.sh
-当前 IPv6 已禁用，正在启用 IPv6...
-启用 IPv6...
-IPv6 已启用.
+```bash
+wget -qO- https://raw.githubusercontent.com/SunMoonWithYou/toggle_ipv6/main/install.sh | sudo bash
 ```
 
-## 工作原理
+## 说明
 
-脚本通过 `sysctl` 命令检查当前的 IPv6 状态。根据当前状态，脚本会通过修改 `sysctl` 设置来启用或禁用 IPv6。
+- 运行后会自动检测当前 IPv6 状态并切换
+- 必须使用 root 权限
+- 再次运行即可切换回来
+- 如果默认分支不是 `main`，请将命令中的 `main` 改为 `master` 或其他分支名
 
-### 禁用 IPv6：
+## 注意事项
 
-- `net.ipv6.conf.all.disable_ipv6=1`
-- `net.ipv6.conf.default.disable_ipv6=1`
-- `net.ipv6.conf.lo.disable_ipv6=1`
+- 请确认远程脚本来源可信后再执行
+- 脚本会修改 `/etc/sysctl.conf`
+- 修改内核参数可能影响 Docker、容器、代理、网络服务等
+- 生产环境建议使用 `/etc/sysctl.d/` 目录管理配置
 
-### 启用 IPv6：
+## License
 
-- `net.ipv6.conf.all.disable_ipv6=0`
-- `net.ipv6.conf.default.disable_ipv6=0`
-- `net.ipv6.conf.lo.disable_ipv6=0`
+MIT
